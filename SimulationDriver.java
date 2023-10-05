@@ -1,49 +1,57 @@
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SimulationDriver implements SimulatorDriverInterface
 {
-    public void addAnswer(Question question, String answer)
+    public int genRandomNumber(int min, int max)
     {
-        question.addAnswer(answer);
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 
-    public void addCorrectAnswer(Question question, int index)
+    public String getQuestion(Question question)
     {
-        question.addCorrectAnswer(index);
+        return question.getQuestion();
+    }
+   
+    //add answer and its correct value to the question
+    public void addAnswer(Question question, String answer, boolean correct)
+    {
+        question.addAnswer(answer, correct);
     }
 
-   public int generateRandomStudentSize(int max)
-   {
-        return ThreadLocalRandom.current().nextInt(10, max + 1);
-   }
+    //get all the answers for a question
+    public Set<String> getQuestionAnswers(Question question)
+    {
+        return question.getAllAnswers();
+    }
 
-   public int generateRandomAnswerSize(int max)
-   {
-        return ThreadLocalRandom.current().nextInt(2, max + 1);
-   }
+    //get the correct answer(s) for a question
+    public Set<String> getCorrectAnswers(Question question)
+    {
+        return question.getCorrectAnswers();
+    }
 
-   public ArrayList<String> getSingleAnswer(ArrayList<Student> student)
-   {
-        ArrayList<String> list = new ArrayList<String>(student.size());
-        for(int i = 0; i < list.size(); i++)
-        {
-            list.add(student.get(i).getAnswer());
-        }
-        return list;
-   }
+    //submit student's single answer
+    public void submitStudentSingleAnswer(Student student, String answer)
+    {
+        student.submitAnswer(answer);
+    }
+
+    //submit student's multiple answers
+    public void submitStudentMultiAnswer(Student student, Set<String> answer)
+    {
+        student.submitAnswers(answer);
+    }
+
+    //get the student's answer to the single choice question
+    public String getStudentSingleAnswer(Student student)
+    {
+        return student.getAnswer(); 
+    }
     
-   public ArrayList<ArrayList<String>> getMultiAnswers(ArrayList<Student> student)
-   {
-        ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>(student.size());
-        for(int i = 0; i < list.size(); i++)
-        {
-            ArrayList<String> sublist = new ArrayList<String>(student.get(i).getAnswers().size());
-            for(int j = 0; j < sublist.size(); j++)
-            {
-                sublist.add(student.get(i).getAnswers().get(j));
-            }
-        }
-        return list;
-   }
+    //get the student's answers to the multiple choice question
+    public Set<String> getStudentMultiAnswers(Student student)
+    {
+        return student.getAnswers();
+    }
 }
