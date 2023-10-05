@@ -1,48 +1,49 @@
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.UUID;
 
 public class Student implements StudentInterface
 {
-    private String name;
-    private String ID;
+    private UUID ID;
     private String singleAnswer;
-    private ArrayList<String> multiAnswers;
+    private Set<String> multiAnswers;
 
-    public Student(String name, String ID)
+    //constructor
+    public Student(UUID ID)
     {
-        this.name = name;
         this.ID = ID;
     }
 
-    public String getName()
-    {
-        return name;
-    }
-
-    public String getID()
+    //get id
+    public UUID getID()
     {
         return ID;
     }
 
+    //get Student's single answer
     public String getAnswer()
     {
         return singleAnswer;
     }
 
-    public ArrayList<String> getAnswers()
+    //get Student's multiple answers
+    public Set<String> getAnswers()
     {
         return multiAnswers;
     }
 
+    //change the Student's single answer
     public void submitAnswer(String answer)
     {
         singleAnswer = answer;
     }
 
-    public void submitAnswer(ArrayList<String> answers)
+    //change the Student's multiple answers
+    public void submitAnswer(Set<String> answers)
     {
-       for(int i = 0; i < answers.size(); i++)
-       {
-            multiAnswers.set(i, answers.get(i));
-       }
+        multiAnswers.clear();
+        for(String i: answers)
+        {
+            multiAnswers.add(i);
+        }
     }
 }
