@@ -28,5 +28,5 @@ public interface StudentInterface
     /** Adds set of answer as the student's for the multiple choice question
      * @param answer The answer to add
      */
-    public void submitAnswer(Set<String> answer);
+    public void submitAnswers(Set<String> answer);
 }
