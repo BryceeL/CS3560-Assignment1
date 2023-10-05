@@ -38,7 +38,7 @@ public class Student implements StudentInterface
     }
 
     //change the Student's multiple answers
-    public void submitAnswer(Set<String> answers)
+    public void submitAnswers(Set<String> answers)
     {
         multiAnswers.clear();
         for(String i: answers)
