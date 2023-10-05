@@ -1,46 +1,52 @@
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SingleChoiceQuestion extends Question
 {
-    private ArrayList<String> allAnswers;
-    private ArrayList<Integer> correctAnswerIndex = new ArrayList<Integer>(1);
+    private HashMap<String, Boolean> answers;
+    boolean correctAnswerPresent = false;
 
-    //constructor for SingleChoiceQuestion object
-    public SingleChoiceQuestion(String question, int allAnswersSize)
+    //constructor
+    public SingleChoiceQuestion(String question, int answerCapacity)
     {
         super(question);
-        allAnswers = new ArrayList<String>(allAnswersSize);
+        answers = new HashMap<String, Boolean>(answerCapacity);
     }
 
-    //return array of all the answers
-    public ArrayList<String> getAllAnswers()
+    //return set of all the possible answers
+    public Set<String> getAllAnswers()
     {
-        if(!allAnswers.isEmpty())
-            return allAnswers;
+        return answers.keySet();
+    }
+
+    public Set<String> getCorrectAnswers()
+    {
+        Set<String> set = new HashSet<String>();
+        for(String answer: getAllAnswers())
+        {
+            if(answers.get(answer) == true)
+            {
+                set.add(answer);
+            }
+        }
+        return set;
+    }
+
+    //add answer (key) and its correct value to the hashmap
+    public void addAnswer(String answer, boolean correct)
+    {
+        if(correct == true)
+        {
+            if(correctAnswerPresent == false)
+            {
+                correctAnswerPresent = true;
+                answers.put(answer, correct);
+            }
+            else
+                throw new IllegalStateException("Cannot add answer because there is a correct one already.");
+        }
         else
-            throw new IllegalStateException("There is not answers in the array list.");
-    }
-
-    public void addAnswer(String answer)
-    {
-        allAnswers.add(answer);
-    }
-
-    //gets the correct answer
-    public ArrayList<Integer> getCorrectAnswers()
-    {
-        if(!correctAnswerIndex.isEmpty())
-            return correctAnswerIndex;
-        else
-            throw new IllegalStateException("There are no correct answer index in the array list.");
-    }
-
-    //set correct answer
-    public void addCorrectAnswer(int index)
-    {
-        if(correctAnswerIndex.isEmpty())
-            correctAnswerIndex.add(index);
-        else
-            throw new IllegalStateException("Cannot add answer; there can only be one.");
+            answers.put(answer, correct); 
     }
 }
