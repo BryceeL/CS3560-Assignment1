@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class SingleChoiceQuestion extends Question
 {
     private ArrayList<String> allAnswers;
-    private ArrayList<String> correctAnswerIndex = new ArrayList<String>(1);
+    private ArrayList<Integer> correctAnswerIndex = new ArrayList<Integer>(1);
 
     //constructor for SingleChoiceQuestion object
     public SingleChoiceQuestion(String question, int allAnswersSize)
@@ -18,7 +18,7 @@ public class SingleChoiceQuestion extends Question
         if(!allAnswers.isEmpty())
             return allAnswers;
         else
-            throw new IllegalStateException("allAnswers array list is empty.");
+            throw new IllegalStateException("There is not answers in the array list.");
     }
 
     public void addAnswer(String answer)
@@ -26,35 +26,21 @@ public class SingleChoiceQuestion extends Question
         allAnswers.add(answer);
     }
 
-    public void removeAnswer(int index)
-    {
-        allAnswers.remove(index);
-    }
-
-    public void overwriteAnswer(String answer, int index)
-    {
-        allAnswers.set(index, answer);
-    }
-
     //gets the correct answer
-    public ArrayList<String> getCorrectAnswers()
+    public ArrayList<Integer> getCorrectAnswers()
     {
         if(!correctAnswerIndex.isEmpty())
             return correctAnswerIndex;
         else
-            throw new IllegalStateException("correctAnswerIndex array list is empty");
+            throw new IllegalStateException("There are no correct answer index in the array list.");
     }
 
     //set correct answer
     public void addCorrectAnswer(int index)
     {
-        correctAnswerIndex.set(1, String.valueOf(index));
-    }
-
-    //set incorrect answer
-    //**NOTE: method does not make use of parameter
-    public void removeCorrectAnswer(int index)
-    {
-        correctAnswerIndex.remove(1);
+        if(correctAnswerIndex.isEmpty())
+            correctAnswerIndex.add(index);
+        else
+            throw new IllegalStateException("Cannot add answer; there can only be one.");
     }
 }

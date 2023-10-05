@@ -1,14 +1,49 @@
-// You need a SimulationDriver to automatically simulate the whole process. Basically,
-// the driver will 1) create a question type and configure the answers; 2) configure the
-// question for iVote Service; 3) randomly generate a number students and the answers; 4)
-// submit all the students’ answers to iVote Service; 5) call the Voting Service output
-// function to display the result
-
 import java.util.ArrayList;
-public class SimulationDriver
+import java.util.concurrent.ThreadLocalRandom;
+
+public class SimulationDriver implements SimulatorDriverInterface
 {
-     public static void main(String[] args)
+    public void addAnswer(Question question, String answer)
     {
-        System.out.print("hi");
+        question.addAnswer(answer);
     }
+
+    public void addCorrectAnswer(Question question, int index)
+    {
+        question.addCorrectAnswer(index);
+    }
+
+   public int generateRandomStudentSize(int max)
+   {
+        return ThreadLocalRandom.current().nextInt(10, max + 1);
+   }
+
+   public int generateRandomAnswerSize(int max)
+   {
+        return ThreadLocalRandom.current().nextInt(2, max + 1);
+   }
+
+   public ArrayList<String> getSingleAnswer(ArrayList<Student> student)
+   {
+        ArrayList<String> list = new ArrayList<String>(student.size());
+        for(int i = 0; i < list.size(); i++)
+        {
+            list.add(student.get(i).getAnswer());
+        }
+        return list;
+   }
+    
+   public ArrayList<ArrayList<String>> getMultiAnswers(ArrayList<Student> student)
+   {
+        ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>(student.size());
+        for(int i = 0; i < list.size(); i++)
+        {
+            ArrayList<String> sublist = new ArrayList<String>(student.get(i).getAnswers().size());
+            for(int j = 0; j < sublist.size(); j++)
+            {
+                sublist.add(student.get(i).getAnswers().get(j));
+            }
+        }
+        return list;
+   }
 }

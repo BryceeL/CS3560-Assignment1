@@ -11,5 +11,8 @@ import java.util.ArrayList;
 
 public class VotingService 
 {
-    
+    public void main(String[] args)
+    {
+        SimulationDriver Driver = new SimulationDriver();
+    }
 }

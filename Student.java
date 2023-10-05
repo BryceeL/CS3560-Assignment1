@@ -4,7 +4,8 @@ public class Student implements StudentInterface
 {
     private String name;
     private String ID;
-    private ArrayList<String> answers;
+    private String singleAnswer;
+    private ArrayList<String> multiAnswers;
 
     public Student(String name, String ID)
     {
@@ -22,18 +23,26 @@ public class Student implements StudentInterface
         return ID;
     }
 
+    public String getAnswer()
+    {
+        return singleAnswer;
+    }
+
     public ArrayList<String> getAnswers()
     {
-        return answers;
+        return multiAnswers;
     }
 
     public void submitAnswer(String answer)
     {
-        answers.add(answer);
+        singleAnswer = answer;
     }
 
-    public void removeAnswer(String answer)
+    public void submitAnswer(ArrayList<String> answers)
     {
-        answers.remove(answer);
+       for(int i = 0; i < answers.size(); i++)
+       {
+            multiAnswers.set(i, answers.get(i));
+       }
     }
 }
