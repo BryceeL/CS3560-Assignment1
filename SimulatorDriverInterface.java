@@ -3,42 +3,60 @@
 // question for iVote Service; 3) randomly generate a number students and the answers; 4)
 // submit all the students’ answers to iVote Service; 5) call the Voting Service output
 // function to display the result
-import java.util.ArrayList;
+import java.util.Set;
 
 public interface SimulatorDriverInterface
 {
-    /** Add answer to Question's answer list
+    /** Generates a random number between 1-100 for a given answer
+     * @param max The number at most it could generate
+     * @return A random number
+     */
+    public int genRandomNumber(int min, int max);
+
+    /** Get the question
+	 * @return question
+	 */
+    public String getQuestion(Question question);
+
+    /** Add answer to question's answer set
      * @param question Question object
      * @param answer The answer to add
+     * @param correct True if the answer is correct
      */
-    public void addAnswer(Question question, String answer);
+    public void addAnswer(Question question, String answer, boolean correct);
 
-    /** Add the index to the Question's list of indices of correct answers
+    /**Get all possible answers to the question
      * @param question Question object
-     * @param index The index that corresponds to the answer that will be marked as correct
+     * @return The set of the possible answers
      */
-    public void addCorrectAnswer(Question question, int index);
+    public Set<String> getQuestionAnswers(Question question);
 
-    /** Generates a random number that will be used for a Student array
-     * @param max The number at most it could generate
-     * @return A random number
+    /** Get a set of answer(s) for the question
+     * @param question Question object
+     * @return the set of correct answer to the question
      */
-    public int generateRandomStudentSize(int max);
+    public Set<String> getCorrectAnswers(Question question);
 
-    /** Generates a random number that will be used for a Answer list
-     * @param max The number at most it could generate
-     * @return A random number
+    /** Submit the student's single answer
+     * @param student
      */
-    public int generateRandomAnswerSize(int max);
+    public void submitStudentSingleAnswer(Student student, String answer);
 
-    /** Gets all the student's single answer
-     * @param student List of Student objects
+    /** Submit the student's multiple answer
+     * @param student
      */
-    public ArrayList<String> getSingleAnswer(ArrayList<Student> student);
+    public void submitStudentMultiAnswer(Student student, Set<String> answer);
 
-    /** Gets all the student's multiple answers
-     * @param student List of Student objects
+    /** Get a student's single answer
+     * @param student Student object
+     * @return single answer
      */
-    public ArrayList<ArrayList<String>> getMultiAnswers(ArrayList<Student> student);
+    public String getStudentSingleAnswer(Student student);
 
+    /** Gets a student's multiple answers
+     * @param student Student answer
+     */
+    public Set<String> getStudentMultiAnswers(Student studen);
+
+    
 }
