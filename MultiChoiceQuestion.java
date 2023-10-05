@@ -1,48 +1,42 @@
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MultiChoiceQuestion extends Question
 {
-    private ArrayList<String> allAnswers;
-    private ArrayList<Integer> correctAnswersIndex;
-    private int indexCount = 0;
+    private HashMap<String, Boolean> answers;
 
-    public MultiChoiceQuestion(String question, int allAnswersSize)
+    //constructor
+    public MultiChoiceQuestion(String question, int answerCapacity)
     {
         super(question);
-        allAnswers = new ArrayList<String>(allAnswersSize);
-        correctAnswersIndex = new ArrayList<Integer>(allAnswersSize);
+        answers = new HashMap<String, Boolean>(answerCapacity);
     }
 
-    public ArrayList<String> getAllAnswers()
+   //return set of all the possible answers
+    public Set<String> getAllAnswers()
     {
-        if(!allAnswers.isEmpty())
-            return allAnswers;
-        else
-            throw new IllegalStateException("There is not answers in the array list.");
+        return answers.keySet();
     }
 
-    public void addAnswer(String answer)
+    public Set<String> getCorrectAnswers()
     {
-        allAnswers.add(answer);
-    }
-
-    public ArrayList<Integer> getCorrectAnswers()
-    {
-        if(!correctAnswersIndex.isEmpty())
-            return correctAnswersIndex;
-        else
-            throw new IllegalStateException("There are no correct answer index in the array list.");
-    }
-
-    //set correct answer
-    public void addCorrectAnswer(int index)
-    {
-        if(indexCount < correctAnswersIndex.size())
+        Set<String> set = new HashSet<String>();
+        for(String answer: getAllAnswers())
         {
-            indexCount++;
-            correctAnswersIndex.add(index);
+            if(answers.get(answer) == true)
+            {
+                set.add(answer);
+            }
         }
-        else
-            throw new IllegalStateException("Cannot add answer because the array list is full.");
+        return set;
     }
+
+    //add answer (key) and its correct value into the hashmap
+    public void addAnswer(String answer, boolean correct)
+    {
+        answers.put(answer, correct); 
+    }
+
+    
 }
