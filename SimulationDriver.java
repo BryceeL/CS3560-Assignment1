@@ -3,8 +3,6 @@ import java.util.ArrayList;
 
 public class SimulationDriver implements SimulatorDriverInterface
 {
-    ArrayList<Integer> singleStatistics;
-    ArrayList<Integer> multiStatistics;
     //creates a question that ask for the correct product
     public Question createSingleQuestion()
     {   
@@ -14,9 +12,6 @@ public class SimulationDriver implements SimulatorDriverInterface
         String questionStr = String.format("What is the product of %d and %d?", op1, op2);
 
         Question question = new SingleChoiceQuestion(questionStr, answerCapacity);
-        singleStatistics = new ArrayList<>(answerCapacity);
-        for(int i = 0; i < answerCapacity; i++)
-            singleStatistics.add(0);
 
         //correct answer
         question.addAnswer(op1 * op2, true);
@@ -36,14 +31,11 @@ public class SimulationDriver implements SimulatorDriverInterface
     //creates question that ask for even answers
     public Question createMultiQuestion()
     {
-        int answerCapacity = genRandomNumber(3, 5);
-        String questionStr = String.format("Which of these numbers are even?");
+        int answerCapacity = genRandomNumber(3, 4);
+        String questionStr = "Which of these numbers are even?";
         boolean evenNumber = false;
 
         Question question = new MultiChoiceQuestion(questionStr, answerCapacity);
-        multiStatistics = new ArrayList<>(answerCapacity);
-        for(int i = 0; i < answerCapacity; i++)
-            multiStatistics.add(0);
 
         for(int i = 0; i < answerCapacity; i++)
         {
@@ -83,81 +75,113 @@ public class SimulationDriver implements SimulatorDriverInterface
         return set;
     }
 
-    public ArrayList<String> simulateSingleAnswers(Question question, ArrayList<Student> studentList)
+    public ArrayList<String> simulateAnswers(Question question, ArrayList<Student> studentList)
     {
         ArrayList<String> output = new ArrayList<>();
+        output.add("----------------------------------");
+        output.add("Simulating students answering the question: " + question.getQuestion());
         for(Student student : studentList)
         {
-            //random chance that student's answer will be any
-            int highestIndex = question.getAllAnswers().size()-1;
-            int randomIndex = genRandomNumber(0, highestIndex);
-            int answer = question.getAllAnswers().get(randomIndex);
-
-            singleStatistics.set(randomIndex, singleStatistics.get(randomIndex)+1);
-           
-
-            student.submitAnswer(answer);
-            output.add(String.format("Student #%d picked %d", student.getID(), answer)); 
-        }
-        return output;
-    }
-
-    public ArrayList<String> simulateMultiAnswers(Question question, ArrayList<Student> studentList)
-    {
-        ArrayList<String> output = new ArrayList<>();
-        for(Student student : studentList)
-        {
-            ArrayList<Integer> answers = new ArrayList<>();
-            int highestIndex = question.getAllAnswers().size()-1;   
-            int randomChoices = genRandomNumber(1, highestIndex);
-            for(int i = 0; i < randomChoices; i++)
+            if(question.getQuestionType().equals("single"))
             {
-                //cannot select the same answer twice
-                int answer;
-                int randomIndex;
-                do
-                {
-                    randomIndex = genRandomNumber(0, highestIndex);
-                    answer = question.getAllAnswers().get(randomIndex);  
-                } 
-                while(checkDuplicateInList(answers, answer));
-                multiStatistics.set(randomIndex, multiStatistics.get(randomIndex)+1);
-                answers.add(answer);
+                //random chance that student's answer will be any
+                int highestIndex = question.getAllAnswers().size()-1;
+                int randomIndex = genRandomNumber(0, highestIndex);
+                int answer = question.getAllAnswers().get(randomIndex);
+
+                student.submitAnswer(answer);
+                question.count(answer);
+
+                output.add(String.format("Student #%d picked %d", student.getID(), answer)); 
             }
-            student.submitAnswers(answers);
+            else if(question.getQuestionType().equals("multi"))
+            {
+                ArrayList<Integer> answers = new ArrayList<>();
+                int highestIndex = question.getAllAnswers().size()-1;   
+                int randomChoices = genRandomNumber(1, highestIndex+1);
+                for(int i = 0; i < randomChoices; i++)
+                {
+                    //cannot select the same answer twice
+                    int answer;
+                    int randomIndex;
+                    do
+                    {
+                        randomIndex = genRandomNumber(0, highestIndex);
+                        answer = question.getAllAnswers().get(randomIndex);  
+                    } 
+                    while(checkDuplicateInList(answers, answer));
+                    
+                    answers.add(answer);
+                    question.count(answer);
+                }
+                student.submitAnswers(answers);
 
-            String answerString = "Student #" + student.getID() + " picked:";
-            for(int i : student.getAnswers())
-                answerString += " " + i;
-            output.add(answerString);     
+                String answerString = "Student #" + student.getID() + " picked:";
+                for(int i : student.getAnswers())
+                    answerString += " " + i;
+                output.add(answerString); 
+            }
         }
         return output;
     }
 
-    //results have how much of each choice was chosen for a single choice question
-    public ArrayList<String> createSingleResults(Question question, ArrayList<Student> studentList)
+    //create arrays of strings to show count of a number and amount of students that are correct
+    public ArrayList<String> createResults(Question question, ArrayList<Student> studentList)
     {
+        int correctStudents = 0;
         ArrayList<String> output = new ArrayList<>();
-        output.add("Results for Single Choice Question:");
-        int i = 0;
-        for(int answer : question.getAllAnswers())
-        {
-            output.add(String.format("%d: %d", answer, singleStatistics.get(i)));
-            i++;
-        }
-        return output;
-    }
 
-    //results have how much of each choice was chosen for a multi choice question
-    public ArrayList<String> createMultiResults(Question question, ArrayList<Student> studentList)
-    {
-        ArrayList<String> output = new ArrayList<>();
-        output.add("Results for Multiple Choice Question:");
-        int j = 0;
-        for(int answer : question.getAllAnswers())
+        //string question, possible answers and correct answers
+        output.add(question.getQuestion());
+        output.add("Possible Answers: " + question.getAllAnswers());
+        output.add("Correct Answers: " + question.getCorrectAnswers());
+
+        
+        if(question.getQuestionType().equals("single"))
         {
-            output.add(String.format("%d: %d", answer, multiStatistics.get(j)));
-            j++;
+            output.add("Results for Single Choice Question:");
+            //get count of how many times each answer was submited
+            for(int answer: question.getAllAnswers())
+                output.add(String.format("%d: %d", answer, question.getCount(answer))); 
+
+            //check if student is correct for single answer
+            for(Student student : studentList)
+            {
+                int studentAnswer = student.getAnswer().get(0);
+                int correctAnswer = question.getCorrectAnswers().get(0);
+                if(studentAnswer == correctAnswer)
+                    correctStudents++;
+            }
+            output.add(String.format("Students that are correct: %d", correctStudents));
+        }
+        else if(question.getQuestionType().equals("multi"))
+        {
+            output.add("Results for Multi Choice Question:");
+            //get count of how many times each answer was submited
+            for(int answer: question.getAllAnswers())
+                output.add(String.format("%d: %d", answer, question.getCount(answer)));
+
+            //check if student is correct for multi answer
+            for(Student student : studentList)
+            {
+                boolean isCorrect = true;
+                //student doesn't have same amount of answers as correct ones
+                if(student.getAnswers().size() != question.getCorrectAnswers().size())
+                    isCorrect = false;
+                else
+                {
+                    for(int answer : question.getCorrectAnswers())
+                    {
+                        //student does not have the answer
+                        if(!student.getAnswers().contains(answer))
+                            isCorrect = false;
+                    }
+                }
+                if(isCorrect)
+                    correctStudents++;
+                
+            }
+            output.add(String.format("Students that are correct: %d", correctStudents));
         }
 
         return output;
