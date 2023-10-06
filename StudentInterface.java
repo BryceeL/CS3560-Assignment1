@@ -8,9 +8,9 @@ public interface StudentInterface
     public int getID();
 
     /** Get the student's one answer
-     * @return the student's one answer
+     * @return the list of the student's one answer
      */
-    public int getAnswer();
+    public ArrayList<Integer> getAnswer();
 
     /** Get the student's answers
      * @return a list of the student's answers
