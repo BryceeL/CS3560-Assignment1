@@ -6,6 +6,11 @@ public interface QuestionInterface
 	 * @return question
 	 */
     public String getQuestion();
+
+    /** Get the type of question
+	 * @return type of question
+	 */
+    public String getQuestionType();
     
     /** Get all of the possible answers to the question
      * @return a set of the answers
@@ -22,6 +27,10 @@ public interface QuestionInterface
      * @param correct Value: True if the answer is correct
      */
     public abstract void addAnswer(int answer, boolean correct);
+
+    public abstract void count(int answer);
+
+    public abstract int getCount(int answer);
 
     
 }
