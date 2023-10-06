@@ -4,13 +4,15 @@ import java.util.ArrayList;
 public class SingleChoiceQuestion extends Question
 {
     private HashMap<Integer, Boolean> answers;
+    private static HashMap<Integer, Integer> answerCounts;
     boolean correctAnswerPresent = false;
 
     //constructor
     public SingleChoiceQuestion(String question, int answerCapacity)
     {
-        super(question);
+        super(question, "single");
         answers = new HashMap<Integer, Boolean>(answerCapacity);
+        answerCounts = new HashMap<Integer, Integer>(answerCapacity);
     }
 
     //return list of all the possible answers
@@ -52,6 +54,24 @@ public class SingleChoiceQuestion extends Question
                 throw new IllegalStateException("Cannot add answer because there is a correct one already.");
         }
         else
-            answers.put(answer, correct); 
+            answers.put(answer, correct);
+        //add the answer to be counted
+        answerCounts.put(answer, 0);
+    }
+
+    //count an answer
+    public void count(int answer)
+    {
+        for(int key: answerCounts.keySet())
+        {
+            if(key == answer)
+                answerCounts.put(key, answerCounts.get(key) + 1);
+        }
+    }
+
+    //return count of an answer
+    public int getCount(int answer)
+    {
+        return answerCounts.get(answer);
     }
 }
