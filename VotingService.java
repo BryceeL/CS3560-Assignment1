@@ -16,22 +16,16 @@ public class VotingService
         ArrayList<Student> studentSet = Driver.createStudentList();
 
         //create outputs to be printed
-        ArrayList<String> output1 = Driver.simulateSingleAnswers(singleQuestion, studentSet);
-        ArrayList<String> output2 = Driver.simulateMultiAnswers(multiQuestion, studentSet);
-        ArrayList<String> a = Driver.createSingleResults(singleQuestion, studentSet);
-        ArrayList<String> b = Driver.createMultiResults(multiQuestion, studentSet); 
+        ArrayList<String> output1 = Driver.simulateAnswers(singleQuestion, studentSet);
+        ArrayList<String> output2 = Driver.simulateAnswers(multiQuestion, studentSet);
+        ArrayList<String> singleQuestionResult = Driver.createResults(singleQuestion, studentSet);
+        ArrayList<String> multiQuestionResult = Driver.createResults(multiQuestion, studentSet); 
 
-        System.out.println(singleQuestion.getQuestion());
-        System.out.println("Possible Answers: " + singleQuestion.getAllAnswers());
-        System.out.println("Correct Answers: " + singleQuestion.getCorrectAnswers());
         printStringArray(output1);
-        printStringArray(a);
+        printStringArray(singleQuestionResult);
 
-        System.out.println(multiQuestion.getQuestion());
-        System.out.println("Possible Answers: " + multiQuestion.getAllAnswers());
-        System.out.println("Correct Answers: " + multiQuestion.getCorrectAnswers());
         printStringArray(output2);
-        printStringArray(b);       
+        printStringArray(multiQuestionResult);       
     }
 
     public static void printStringArray(ArrayList<String> strList)
