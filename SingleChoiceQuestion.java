@@ -1,40 +1,45 @@
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
 
 public class SingleChoiceQuestion extends Question
 {
-    private HashMap<String, Boolean> answers;
+    private HashMap<Integer, Boolean> answers;
     boolean correctAnswerPresent = false;
 
     //constructor
     public SingleChoiceQuestion(String question, int answerCapacity)
     {
         super(question);
-        answers = new HashMap<String, Boolean>(answerCapacity);
+        answers = new HashMap<Integer, Boolean>(answerCapacity);
     }
 
-    //return set of all the possible answers
-    public Set<String> getAllAnswers()
+    //return list of all the possible answers
+    public ArrayList<Integer> getAllAnswers()
     {
-        return answers.keySet();
+        ArrayList<Integer> list = new ArrayList<>();
+        for(int answer: answers.keySet())
+            list.add(answer);
+        return list;
     }
 
-    public Set<String> getCorrectAnswers()
+    //return list of the only correct answer
+    public ArrayList<Integer> getCorrectAnswers()
     {
-        Set<String> set = new HashSet<String>();
-        for(String answer: getAllAnswers())
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for(Integer answer: getAllAnswers())
         {
+            //find if answer correct value is 'true'
             if(answers.get(answer) == true)
             {
-                set.add(answer);
+                list.add(answer);
+                break;
             }
         }
-        return set;
+        return list;
     }
 
     //add answer (key) and its correct value to the hashmap
-    public void addAnswer(String answer, boolean correct)
+    public void addAnswer(int answer, boolean correct)
     {
         if(correct == true)
         {

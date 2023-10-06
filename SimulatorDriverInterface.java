@@ -4,59 +4,38 @@
 // submit all the students’ answers to iVote Service; 5) call the Voting Service output
 // function to display the result
 import java.util.Set;
+import java.util.ArrayList;
 
 public interface SimulatorDriverInterface
-{
-    /** Generates a random number between 1-100 for a given answer
-     * @param max The number at most it could generate
-     * @return A random number
+{   
+    /** Creates a question that asks for a product of two random numbers
+     * @return question with set of one answer
      */
-    public int genRandomNumber(int min, int max);
+    public Question createSingleQuestion();
 
-    /** Get the question
-	 * @return question
-	 */
-    public String getQuestion(Question question);
-
-    /** Add answer to question's answer set
-     * @param question Question object
-     * @param answer The answer to add
-     * @param correct True if the answer is correct
+    /** Creates a question that asks for even numbers
+     * @return question with set of multiple answers
      */
-    public void addAnswer(Question question, String answer, boolean correct);
+    public Question createMultiQuestion();
 
-    /**Get all possible answers to the question
-     * @param question Question object
-     * @return The set of the possible answers
+    /** Creates a set of random amount of students
+     * @return set of random amount of students
      */
-    public Set<String> getQuestionAnswers(Question question);
+    public ArrayList<Student> createStudentList();
 
-    /** Get a set of answer(s) for the question
-     * @param question Question object
-     * @return the set of correct answer to the question
+    /** Simulates students answering the question with single choice
+     * @param question singleChoiceQuestion object
+     * @param studentList list of students
+     * @return results as strings for VotingService to print
      */
-    public Set<String> getCorrectAnswers(Question question);
+    public ArrayList<String> simulateSingleAnswers(Question question, ArrayList<Student> studentList);
 
-    /** Submit the student's single answer
-     * @param student
+    /** Simulates students answering the question
+     * @param question MultiChoiceQuestion object
+     * @param studentList list of students
+     * @return list of strings that tell what answers student chose
      */
-    public void submitStudentSingleAnswer(Student student, String answer);
-
-    /** Submit the student's multiple answer
-     * @param student
-     */
-    public void submitStudentMultiAnswer(Student student, Set<String> answer);
-
-    /** Get a student's single answer
-     * @param student Student object
-     * @return single answer
-     */
-    public String getStudentSingleAnswer(Student student);
-
-    /** Gets a student's multiple answers
-     * @param student Student answer
-     */
-    public Set<String> getStudentMultiAnswers(Student studen);
+    public ArrayList<String> simulateMultiAnswers(Question question, ArrayList<Student> studentList);
 
     
 }

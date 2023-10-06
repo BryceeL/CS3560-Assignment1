@@ -1,4 +1,5 @@
 import java.util.Set;
+import java.util.ArrayList;
 
 public interface QuestionInterface 
 {
@@ -10,18 +11,18 @@ public interface QuestionInterface
     /** Get all of the possible answers to the question
      * @return a set of the answers
      */
-    public abstract Set<String> getAllAnswers();
+    public abstract ArrayList<Integer> getAllAnswers();
 
     /** Get all of the correct answer(s) to the question
      * @return a set of the answers
      */
-    public abstract Set<String> getCorrectAnswers();
+    public abstract ArrayList<Integer> getCorrectAnswers();
 
     /** Adds the answer to question's answer set as a key and value
-     * @param answer Key: String answer
+     * @param answer Key: int answer
      * @param correct Value: True if the answer is correct
      */
-    public abstract void addAnswer(String answer, boolean correct);
+    public abstract void addAnswer(int answer, boolean correct);
 
     
 }
