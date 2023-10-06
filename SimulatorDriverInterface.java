@@ -17,19 +17,21 @@ public interface SimulatorDriverInterface
      */
     public ArrayList<Student> createStudentList();
 
-    /** Simulates students answering the question with single choice
-     * @param question singleChoiceQuestion object
-     * @param studentList list of students
-     * @return results as strings for VotingService to print
-     */
-    public ArrayList<String> simulateSingleAnswers(Question question, ArrayList<Student> studentList);
-
     /** Simulates students answering the question
-     * @param question MultiChoiceQuestion object
+     * @param question Question object
      * @param studentList list of students
-     * @return list of strings that tell what answers student chose
+     * @return list of string outputs for VotingService to print
      */
-    public ArrayList<String> simulateMultiAnswers(Question question, ArrayList<Student> studentList);
+    public ArrayList<String> simulateAnswers(Question question, ArrayList<Student> studentList);
+
+    /** Creates results including the count of each answer that was submited and how many students were correct
+     * @param question Question object
+     * @param studentList list of students
+     * @return ist of string outputs for VotingService to print
+     */
+    public ArrayList<String> createResults(Question question, ArrayList<Student> studentList);
+
+   
 
     
 }
