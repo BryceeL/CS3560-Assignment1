@@ -3,13 +3,14 @@ import java.util.ArrayList;
 public class Student implements StudentInterface
 {
     private int ID;
-    private int singleAnswer = -1;
+    private ArrayList<Integer> singleAnswer = new ArrayList<>(1);
     private ArrayList<Integer> multiAnswers = new ArrayList<>();
 
     //constructor
     public Student(int ID)
     {
         this.ID = ID;
+        singleAnswer.add(0);
     }
 
     //get id
@@ -19,7 +20,7 @@ public class Student implements StudentInterface
     }
 
     //get Student's single answer
-    public int getAnswer()
+    public ArrayList<Integer> getAnswer()
     {
         return singleAnswer;
     }
@@ -33,16 +34,16 @@ public class Student implements StudentInterface
     //change the Student's single answer
     public void submitAnswer(int answer)
     {
-        singleAnswer = answer;
+        singleAnswer.set(0, answer);
     }
 
     //change the Student's multiple answers
-    public void submitAnswers(ArrayList<Integer> answers)
+    public void submitAnswers(ArrayList<Integer> answerList)
     {
         multiAnswers.clear();
-        for(int i: answers)
+        for(int answer: answerList)
         {
-            multiAnswers.add(i);
+            multiAnswers.add(answer);
         }
     }
 }
