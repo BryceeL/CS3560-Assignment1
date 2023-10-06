@@ -4,12 +4,14 @@ import java.util.HashMap;
 public class MultiChoiceQuestion extends Question
 {
     private HashMap<Integer, Boolean> answers;
+    private static HashMap<Integer, Integer> answerCounts;
 
     //constructor
     public MultiChoiceQuestion(String question, int answerCapacity)
     {
-        super(question);
+        super(question, "multi");
         answers = new HashMap<Integer, Boolean>(answerCapacity);
+        answerCounts = new HashMap<Integer, Integer>(answerCapacity);
     }
 
     //return set of all the possible answers
@@ -40,6 +42,23 @@ public class MultiChoiceQuestion extends Question
     public void addAnswer(int answer, boolean correct)
     {
         answers.put(answer, correct); 
+        //add the answer to be counted
+        answerCounts.put(answer, 0);
+    }
+
+    public void count(int answer)
+    {
+        for(int key: answerCounts.keySet())
+        {
+            if(key == answer)
+                answerCounts.put(key, answerCounts.get(key) + 1);
+        }
+    }
+
+    //return count of an answer
+    public int getCount(int answer)
+    {
+        return answerCounts.get(answer);
     }
 
     
